@@ -2845,9 +2845,21 @@ defmodule Nostrum.Api do
   @doc """
   Exchange a code for authorization tokens
   """
-  @spec oauth2_token(binary()) :: error | {:ok, map()}
-  def oauth2_token(%{} = options) do
-    request(:post, Constants.oauth2_token(), options)
+  def oauth2_token(client_id, client_secret, grant_type, redirect_uri, code, scope) do
+    data =
+      {:form,
+       [
+         {:client_id, client_id},
+         {:client_secret, client_secret},
+         {:grant_type, grant_type},
+         {:redirect_uri, redirect_uri},
+         {:code, code},
+         {:scope, scope}
+       ]}
+
+    request(:post, Constants.oauth2_token(), data, [
+      {"content-type", "application/x-www-form-urlencoded"}
+    ])
     |> handle_request_with_decode
   end
 
@@ -2870,13 +2882,19 @@ defmodule Nostrum.Api do
   end
 
   # HTTPosion defaults to `""` for an empty body, so it's safe to do so here
-  def request(method, route, body \\ "", options \\ []) do
+  def request(
+        method,
+        route,
+        body \\ "",
+        options \\ [],
+        headers \\ [{"content-type", "application/json"}]
+      ) do
     request = %{
       method: method,
       route: route,
       body: body,
       options: options,
-      headers: [{"content-type", "application/json"}]
+      headers: headers
     }
 
     GenServer.call(Ratelimiter, {:queue, request, nil}, :infinity)
