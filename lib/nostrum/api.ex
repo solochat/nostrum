@@ -2842,6 +2842,15 @@ defmodule Nostrum.Api do
     |> handle_request_with_decode
   end
 
+  @doc """
+  Exchange a code for authorization tokens
+  """
+  @spec oauth2_token(binary()) :: error | {:ok, map()}
+  def oauth2_token(%{} = options) do
+    request(:post, Constants.oauth2_token(), options)
+    |> handle_request_with_decode
+  end
+
   @spec maybe_add_reason(String.t() | nil) :: List.t()
   defp maybe_add_reason(reason) do
     maybe_add_reason(reason, [{"content-type", "application/json"}])

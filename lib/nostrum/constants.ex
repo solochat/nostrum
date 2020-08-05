@@ -102,6 +102,8 @@ defmodule Nostrum.Constants do
   def cdn_icon(id, icon, image_format), do: "/icons/#{id}/#{icon}.#{image_format}"
   def cdn_splash(id, splash, image_format), do: "/splashes/#{id}/#{splash}.#{image_format}"
 
+  def oauth2_token, do: "/oauth2/token"
+
   def discord_epoch, do: 1_420_070_400_000
 
   def opcodes do
