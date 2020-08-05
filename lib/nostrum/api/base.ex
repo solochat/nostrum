@@ -13,6 +13,7 @@ defmodule Nostrum.Api.Base do
 
   def process_request_body(""), do: ""
   def process_request_body({:multipart, _} = body), do: body
+  def process_request_body({:form, _} = body), do: body
   def process_request_body(body), do: Poison.encode!(body)
 
   def process_request_headers(headers) do

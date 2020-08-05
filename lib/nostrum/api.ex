@@ -2845,19 +2845,8 @@ defmodule Nostrum.Api do
   @doc """
   Exchange a code for authorization tokens
   """
-  def oauth2_token(client_id, client_secret, grant_type, redirect_uri, code, scope) do
-    data =
-      {:form,
-       [
-         {:client_id, client_id},
-         {:client_secret, client_secret},
-         {:grant_type, grant_type},
-         {:redirect_uri, redirect_uri},
-         {:code, code},
-         {:scope, scope}
-       ]}
-
-    request(:post, Constants.oauth2_token(), data, [
+  def oauth2_token(data) do
+    request(:post, Constants.oauth2_token(), {:form, data}, [], [
       {"content-type", "application/x-www-form-urlencoded"}
     ])
     |> handle_request_with_decode
